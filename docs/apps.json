@@ -1,6 +1,20 @@
 {
   "apps": [
     {
+      "name": "CryptoTracker",
+      "version": "1.0.0",
+      "category": "Finance",
+      "icon": "📈",
+      "color": "#f7931a",
+      "summary": "Cours en direct de 12 cryptos avec graphique.",
+      "description": "Prix, variation 24 h, plus haut et plus bas de BTC, ETH, SOL et 9 autres cryptos (API publique Binance), graphique sur 1 h, 24 h, 7 j ou 30 j, batterie et retournement automatique de l'écran. Au premier démarrage, connectez-vous au Wi-Fi « CryptoTracker-Setup » pour choisir votre réseau.",
+      "id": "cryptotracker",
+      "manifest": "firmware/cryptotracker/manifest.json",
+      "size": 1567488,
+      "sha256": "30f6f0239f0c",
+      "updated": "2026-11-21"
+    },
+    {
       "name": "Dessin",
       "version": "1.0.0",
       "category": "Créativité",
@@ -11,7 +25,7 @@
       "id": "dessin",
       "manifest": "firmware/dessin/manifest.json",
       "size": 606576,
-      "sha256": "6121ed4b7f37",
+      "sha256": "e6c92fc7b199",
       "updated": "2026-11-21"
     },
     {
@@ -25,7 +39,7 @@
       "id": "test_ecran",
       "manifest": "firmware/test_ecran/manifest.json",
       "size": 667952,
-      "sha256": "a1804d0254e0",
+      "sha256": "6bdac3887604",
       "updated": "2026-11-21"
     }
   ]

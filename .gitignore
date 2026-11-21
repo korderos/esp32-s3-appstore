@@ -2,4 +2,4 @@
 .vscode/
 .claude/
 __pycache__/
-apps/
+/apps/

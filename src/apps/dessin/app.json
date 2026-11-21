@@ -1,0 +1,9 @@
+{
+  "name": "Dessin",
+  "version": "1.0.0",
+  "category": "Créativité",
+  "icon": "🎨",
+  "color": "#ff5d8f",
+  "summary": "Dessinez au doigt sur tout l'écran.",
+  "description": "Ardoise tactile plein écran : six couleurs, trois épaisseurs de trait et un bouton pour tout effacer. Le dessin est stocké en PSRAM."
+}

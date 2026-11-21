@@ -1,0 +1,9 @@
+{
+  "name": "Test écran",
+  "version": "1.0.0",
+  "category": "Outils",
+  "icon": "🧪",
+  "color": "#3a86ff",
+  "summary": "Vérifie l'écran, le tactile, la PSRAM et la luminosité.",
+  "description": "Bandes rouge/vert/bleu pour contrôler les couleurs, coordonnées du toucher en direct, compteur de temps et bouton de luminosité. Infos puce sur le port série USB."
+}

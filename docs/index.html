@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Appstore ESP32-S3</title>
+<meta name="description" content="Choisissez une application et installez-la sur le Waveshare ESP32-S3-Touch-LCD-3.49 par USB, depuis le navigateur.">
+<script type="module" src="https://unpkg.com/esp-web-tools@10.1.0/dist/web/install-button.js?module"></script>
+<style>
+  :root {
+    --bg: #f4f3ef;
+    --surface: #ffffff;
+    --surface-2: #ebe9e3;
+    --text: #1d1c1a;
+    --muted: #6b6860;
+    --line: #dcd9d1;
+    --accent: #1d1c1a;
+    --accent-text: #ffffff;
+    --warn-bg: #fff4d6;
+    --warn-text: #6b4e00;
+    --device: #121212;
+    --radius: 14px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #131312;
+      --surface: #1c1c1a;
+      --surface-2: #262623;
+      --text: #f1efe9;
+      --muted: #9d9a91;
+      --line: #33322e;
+      --accent: #f1efe9;
+      --accent-text: #131312;
+      --warn-bg: #3a3014;
+      --warn-text: #f3d98a;
+      --device: #000000;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #131312; --surface: #1c1c1a; --surface-2: #262623; --text: #f1efe9;
+    --muted: #9d9a91; --line: #33322e; --accent: #f1efe9; --accent-text: #131312;
+    --warn-bg: #3a3014; --warn-text: #f3d98a; --device: #000000;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 32px 16px 64px; }
+  header { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 16px; margin-bottom: 28px; }
+  h1 { font-size: 28px; line-height: 1.2; margin: 0 0 4px; letter-spacing: -0.01em; }
+  .sub { color: var(--muted); margin: 0; }
+  .chip { font-size: 13px; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; white-space: nowrap; }
+
+  .warn { background: var(--warn-bg); color: var(--warn-text); border-radius: var(--radius); padding: 12px 16px; margin-bottom: 24px; font-size: 15px; }
+  .warn[hidden] { display: none; }
+
+  .layout { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 24px; align-items: start; }
+  @media (max-width: 820px) { .layout { grid-template-columns: 1fr; } }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .card {
+    display: flex; gap: 14px; align-items: center; text-align: left; width: 100%;
+    background: var(--surface); color: inherit; border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 14px; cursor: pointer; font: inherit;
+  }
+  .card:hover { border-color: var(--muted); }
+  .card[aria-pressed="true"] { border-color: var(--text); box-shadow: inset 0 0 0 1px var(--text); }
+  .card:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
+  .icon { flex: none; width: 52px; height: 52px; border-radius: 12px; display: grid; place-items: center; font-size: 28px; }
+  .card b { display: block; font-size: 16px; }
+  .card small { color: var(--muted); font-size: 13px; }
+
+  .detail { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; position: sticky; top: 16px; }
+  .detail .head { display: flex; gap: 16px; align-items: center; margin-bottom: 12px; }
+  .detail h2 { margin: 0; font-size: 20px; }
+  .meta { color: var(--muted); font-size: 13px; }
+  .detail p { margin: 0 0 16px; }
+  .device {
+    width: 72px; height: 228px; margin: 0 auto 20px; border-radius: 12px; background: var(--device);
+    border: 5px solid var(--surface-2); display: grid; place-items: center; font-size: 30px;
+  }
+  dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 16px; font-size: 14px; margin: 0 0 20px; }
+  dt { color: var(--muted); }
+  dd { margin: 0; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+  .install {
+    width: 100%; border: 0; border-radius: 10px; padding: 12px 16px; cursor: pointer;
+    background: var(--accent); color: var(--accent-text); font: 600 16px/1.2 inherit; font-family: inherit;
+  }
+  .install:hover { opacity: .9; }
+  .hint { color: var(--muted); font-size: 13px; margin-top: 12px; }
+  .empty { color: var(--muted); padding: 24px 0; }
+
+  section.how { margin-top: 48px; }
+  section.how h2 { font-size: 18px; margin: 0 0 12px; }
+  ol { margin: 0; padding-left: 20px; color: var(--muted); }
+  ol li { margin-bottom: 6px; }
+  code { font-family: ui-monospace, Consolas, monospace; font-size: 0.9em; background: var(--surface-2); padding: 1px 5px; border-radius: 5px; color: var(--text); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Appstore ESP32-S3</h1>
+      <p class="sub">Choisissez une application, branchez le module en USB, installez.</p>
+    </div>
+    <span class="chip">Waveshare ESP32-S3-Touch-LCD-3.49 V2</span>
+  </header>
+
+  <div class="warn" id="noserial" hidden>
+    Ce navigateur ne permet pas l'accès USB (Web Serial). Ouvrez cette page dans Chrome ou Edge sur ordinateur.
+  </div>
+
+  <div class="layout">
+    <div class="grid" id="grid" role="list"><p class="empty">Chargement du catalogue…</p></div>
+
+    <aside class="detail" id="detail" aria-live="polite">
+      <div class="device" id="d-device"></div>
+      <div class="head">
+        <div class="icon" id="d-icon"></div>
+        <div>
+          <h2 id="d-name"></h2>
+          <div class="meta" id="d-cat"></div>
+        </div>
+      </div>
+      <p id="d-desc"></p>
+      <dl>
+        <dt>Version</dt><dd id="d-version"></dd>
+        <dt>Taille</dt><dd id="d-size"></dd>
+        <dt>Mise à jour</dt><dd id="d-updated"></dd>
+      </dl>
+      <esp-web-install-button id="installer">
+        <button slot="activate" class="install" id="d-btn">Installer sur le module</button>
+        <span slot="unsupported"><button class="install" disabled>USB non pris en charge par ce navigateur</button></span>
+        <span slot="not-allowed"><button class="install" disabled>Page à ouvrir en HTTPS</button></span>
+      </esp-web-install-button>
+      <p class="hint">Remplace l'application actuelle du module. Si l'écran reste noir après l'installation, appuyez sur RESET.</p>
+    </aside>
+  </div>
+
+  <section class="how">
+    <h2>Installation</h2>
+    <ol>
+      <li>Branchez le module sur ce PC avec un câble USB-C de données.</li>
+      <li>Cliquez sur « Installer », choisissez le port <code>USB JTAG/serial debug unit</code>, puis confirmez.</li>
+      <li>Si aucun port n'apparaît : maintenez BOOT, appuyez sur RESET, relâchez BOOT, puis réessayez.</li>
+    </ol>
+  </section>
+</div>
+
+<script>
+  if (!("serial" in navigator)) document.getElementById("noserial").hidden = false;
+
+  const $ = (id) => document.getElementById(id);
+  let apps = [];
+
+  function fmtSize(bytes) {
+    return bytes >= 1048576 ? (bytes / 1048576).toFixed(1).replace(".", ",") + " Mo"
+                            : Math.round(bytes / 1024) + " Ko";
+  }
+
+  function tint(hex) { return hex ? hex + "33" : "var(--surface-2)"; }
+
+  function select(id) {
+    const app = apps.find((a) => a.id === id) || apps[0];
+    if (!app) return;
+    document.querySelectorAll(".card").forEach((c) => c.setAttribute("aria-pressed", c.dataset.id === app.id));
+    $("d-icon").textContent = app.icon || "📦";
+    $("d-icon").style.background = tint(app.color);
+    $("d-device").textContent = app.icon || "📦";
+    $("d-name").textContent = app.name;
+    $("d-cat").textContent = app.category || "";
+    $("d-desc").textContent = app.description || app.summary || "";
+    $("d-version").textContent = app.version;
+    $("d-size").textContent = fmtSize(app.size);
+    $("d-updated").textContent = app.updated || "";
+    $("d-btn").textContent = "Installer " + app.name;
+    $("installer").manifest = app.manifest;
+    $("installer").setAttribute("manifest", app.manifest);
+    try { history.replaceState(null, "", "#" + app.id); } catch (e) {}
+  }
+
+  function render() {
+    const grid = $("grid");
+    grid.innerHTML = "";
+    if (!apps.length) {
+      grid.innerHTML = '<p class="empty">Aucune application publiée.</p>';
+      $("detail").hidden = true;
+      return;
+    }
+    for (const app of apps) {
+      const b = document.createElement("button");
+      b.className = "card";
+      b.dataset.id = app.id;
+      b.setAttribute("role", "listitem");
+      b.innerHTML = '<span class="icon"></span><span><b></b><small></small></span>';
+      b.querySelector(".icon").textContent = app.icon || "📦";
+      b.querySelector(".icon").style.background = tint(app.color);
+      b.querySelector("b").textContent = app.name;
+      b.querySelector("small").textContent = app.summary || "";
+      b.addEventListener("click", () => select(app.id));
+      grid.appendChild(b);
+    }
+    select(location.hash.slice(1));
+  }
+
+  fetch("apps.json", { cache: "no-cache" })
+    .then((r) => r.json())
+    .then((data) => { apps = data.apps || []; render(); })
+    .catch(() => { $("grid").innerHTML = '<p class="empty">Impossible de charger apps.json.</p>'; $("detail").hidden = true; });
+</script>
+</body>
+</html>

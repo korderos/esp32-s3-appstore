@@ -1,0 +1,32 @@
+{
+  "apps": [
+    {
+      "name": "Dessin",
+      "version": "1.0.0",
+      "category": "Créativité",
+      "icon": "🎨",
+      "color": "#ff5d8f",
+      "summary": "Dessinez au doigt sur tout l'écran.",
+      "description": "Ardoise tactile plein écran : six couleurs, trois épaisseurs de trait et un bouton pour tout effacer. Le dessin est stocké en PSRAM.",
+      "id": "dessin",
+      "manifest": "firmware/dessin/manifest.json",
+      "size": 606576,
+      "sha256": "6121ed4b7f37",
+      "updated": "2026-11-21"
+    },
+    {
+      "name": "Test écran",
+      "version": "1.0.0",
+      "category": "Outils",
+      "icon": "🧪",
+      "color": "#3a86ff",
+      "summary": "Vérifie l'écran, le tactile, la PSRAM et la luminosité.",
+      "description": "Bandes rouge/vert/bleu pour contrôler les couleurs, coordonnées du toucher en direct, compteur de temps et bouton de luminosité. Infos puce sur le port série USB.",
+      "id": "test_ecran",
+      "manifest": "firmware/test_ecran/manifest.json",
+      "size": 667952,
+      "sha256": "a1804d0254e0",
+      "updated": "2026-11-21"
+    }
+  ]
+}

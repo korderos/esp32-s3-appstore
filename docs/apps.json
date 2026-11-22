@@ -29,6 +29,20 @@
       "updated": "2026-11-21"
     },
     {
+      "name": "Météo",
+      "version": "1.0.0",
+      "category": "Utilitaires",
+      "icon": "🌤️",
+      "color": "#4ea8ff",
+      "summary": "Météo détaillée de plusieurs villes, changez de ville d'un balayage.",
+      "description": "Conditions actuelles avec icône (jour ou nuit), ressenti, humidité, vent et rafales, pression, nuages, indice UV, lever et coucher du soleil, courbe de température et risque de pluie sur 24 h, prévisions sur 7 jours (API publique Open-Meteo). Jusqu'à 8 villes : balayez vers la gauche ou la droite pour passer de l'une à l'autre. Au premier démarrage, connectez-vous au Wi-Fi « Meteo-Setup » pour choisir votre réseau et vos villes ; la liste se modifie ensuite sur http://meteo.local.",
+      "id": "meteo",
+      "manifest": "firmware/meteo/manifest.json",
+      "size": 1612144,
+      "sha256": "f877f318276a",
+      "updated": "2026-11-22"
+    },
+    {
       "name": "Test écran",
       "version": "1.0.0",
       "category": "Outils",

@@ -7,12 +7,13 @@
       "icon": "📈",
       "color": "#f7931a",
       "summary": "Cours en direct de 12 cryptos avec graphique.",
-      "description": "Prix, variation 24 h, plus haut et plus bas de BTC, ETH, SOL et 9 autres cryptos (API publique Binance), graphique sur 1 h, 24 h, 7 j ou 30 j, batterie et retournement automatique de l'écran. Au premier démarrage, connectez-vous au Wi-Fi « CryptoTracker-Setup » pour choisir votre réseau.",
+      "description": "Prix, variation 24 h, plus haut et plus bas de BTC, ETH, SOL et 9 autres cryptos (API publique Binance), graphique sur 1 h, 24 h, 7 j ou 30 j, batterie et retournement automatique de l'écran. Le Wi-Fi se saisit à la fin de l'installation (ou via le Wi-Fi « CryptoTracker-Setup ») et il est partagé avec les autres applications.",
+      "wifi": true,
       "id": "cryptotracker",
       "manifest": "firmware/cryptotracker/manifest.json",
-      "size": 1567488,
-      "sha256": "30f6f0239f0c",
-      "updated": "2026-11-21"
+      "size": 1574384,
+      "sha256": "e0bf75410c66",
+      "updated": "2026-11-22"
     },
     {
       "name": "Dessin",
@@ -24,9 +25,9 @@
       "description": "Ardoise tactile plein écran : six couleurs, trois épaisseurs de trait et un bouton pour tout effacer. Le dessin est stocké en PSRAM.",
       "id": "dessin",
       "manifest": "firmware/dessin/manifest.json",
-      "size": 606576,
-      "sha256": "e6c92fc7b199",
-      "updated": "2026-11-21"
+      "size": 607728,
+      "sha256": "4412cbd0f2a8",
+      "updated": "2026-11-22"
     },
     {
       "name": "Météo",
@@ -35,12 +36,16 @@
       "icon": "🌤️",
       "color": "#4ea8ff",
       "summary": "Météo détaillée de plusieurs villes, changez de ville d'un balayage.",
-      "description": "Conditions actuelles avec icône (jour ou nuit), ressenti, humidité, vent et rafales, pression, nuages, indice UV, lever et coucher du soleil, courbe de température et risque de pluie sur 24 h, prévisions sur 7 jours (API publique Open-Meteo). Jusqu'à 8 villes : balayez vers la gauche ou la droite pour passer de l'une à l'autre. Au premier démarrage, connectez-vous au Wi-Fi « Meteo-Setup » pour choisir votre réseau et vos villes ; la liste se modifie ensuite sur http://meteo.local.",
+      "description": "Conditions actuelles avec icône (jour ou nuit), ressenti, humidité, vent et rafales, pression, nuages, indice UV, lever et coucher du soleil, courbe de température et risque de pluie sur 24 h, prévisions sur 7 jours (API publique Open-Meteo). Jusqu'à 8 villes : balayez vers la gauche ou la droite pour passer de l'une à l'autre. Le Wi-Fi se saisit à la fin de l'installation (ou via le Wi-Fi « Meteo-Setup ») et il est partagé avec les autres applications ; la liste des villes se modifie sur http://meteo.local.",
+      "wifi": true,
       "id": "meteo",
       "manifest": "firmware/meteo/manifest.json",
-      "size": 1612144,
-      "sha256": "f877f318276a",
-      "updated": "2026-11-22"
+      "size": 1619152,
+      "sha256": "90727c1e12a5",
+      "updated": "2026-11-22",
+      "screenshots": [
+        "screenshots/meteo/1.png"
+      ]
     },
     {
       "name": "Test écran",
@@ -52,9 +57,9 @@
       "description": "Bandes rouge/vert/bleu pour contrôler les couleurs, coordonnées du toucher en direct, compteur de temps et bouton de luminosité. Infos puce sur le port série USB.",
       "id": "test_ecran",
       "manifest": "firmware/test_ecran/manifest.json",
-      "size": 667952,
-      "sha256": "6bdac3887604",
-      "updated": "2026-11-21"
+      "size": 670384,
+      "sha256": "a5d566510ab9",
+      "updated": "2026-11-22"
     }
   ]
 }

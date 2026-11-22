@@ -392,13 +392,16 @@ static void refresh_dots() {
 static void refresh_24(const WxData &w) {
   int n = w.nh;
   if (n < 2) {
-    lv_chart_set_point_count(chart_t, 0);
-    lv_chart_set_point_count(chart_p, 0);
+    // LVGL garde au moins 1 point et divise par (points - 1) : on masque plutôt que vider
+    lv_obj_add_flag(chart_t, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(chart_p, LV_OBJ_FLAG_HIDDEN);
     for (int i = 0; i < 6; i++) { lv_obj_add_flag(pt_lbl[i], LV_OBJ_FLAG_HIDDEN); lv_obj_add_flag(hr_lbl[i], LV_OBJ_FLAG_HIDDEN); }
     lv_obj_clear_flag(empty24, LV_OBJ_FLAG_HIDDEN);
     return;
   }
   lv_obj_add_flag(empty24, LV_OBJ_FLAG_HIDDEN);
+  lv_obj_clear_flag(chart_t, LV_OBJ_FLAG_HIDDEN);
+  lv_obj_clear_flag(chart_p, LV_OBJ_FLAG_HIDDEN);
   float mn = w.hTemp[0], mx = w.hTemp[0];
   for (int i = 1; i < n; i++) { mn = fminf(mn, w.hTemp[i]); mx = fmaxf(mx, w.hTemp[i]); }
   float span = fmaxf(mx - mn, 2.0f);
@@ -721,7 +724,8 @@ static void build_col_c() {
   lv_chart_set_type(chart_p, LV_CHART_TYPE_BAR);
   lv_chart_set_range(chart_p, LV_CHART_AXIS_PRIMARY_Y, 0, 220);  // 100 % = ~45 % de la hauteur
   lv_chart_set_div_line_count(chart_p, 0, 0);
-  lv_chart_set_point_count(chart_p, 0);
+  lv_chart_set_point_count(chart_p, 2);
+  lv_obj_add_flag(chart_p, LV_OBJ_FLAG_HIDDEN);
   lv_obj_set_style_bg_opa(chart_p, LV_OPA_TRANSP, 0);
   lv_obj_set_style_border_width(chart_p, 0, 0);
   lv_obj_set_style_pad_all(chart_p, 0, 0);
@@ -736,7 +740,8 @@ static void build_col_c() {
   lv_obj_set_pos(chart_t, 0, 0);
   lv_chart_set_type(chart_t, LV_CHART_TYPE_LINE);
   lv_chart_set_div_line_count(chart_t, 3, 0);
-  lv_chart_set_point_count(chart_t, 0);
+  lv_chart_set_point_count(chart_t, 2);
+  lv_obj_add_flag(chart_t, LV_OBJ_FLAG_HIDDEN);
   lv_obj_set_style_bg_opa(chart_t, LV_OPA_TRANSP, 0);
   lv_obj_set_style_border_width(chart_t, 0, 0);
   lv_obj_set_style_pad_all(chart_t, 0, 0);

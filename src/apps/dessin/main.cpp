@@ -2,6 +2,7 @@
 #include <esp_heap_caps.h>
 #include <lvgl.h>
 #include "../../display.h"
+#include "../common/screenshot.h"
 
 // App « Dessin » : ardoise tactile, barre d'outils en haut, toile en PSRAM dessous.
 
@@ -142,6 +143,7 @@ void setup() {
     Serial.println("ERREUR : initialisation de l'ecran");
     return;
   }
+  screenshot_begin(display_lock, display_unlock);
   if (display_lock(-1)) {
     build_ui();
     display_unlock();
@@ -151,5 +153,6 @@ void setup() {
 }
 
 void loop() {
-  delay(1000);
+  screenshot_poll();  // "SCREENSHOT" depuis le PC (scripts/screenshot.py)
+  delay(20);
 }

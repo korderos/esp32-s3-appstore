@@ -80,6 +80,14 @@
     width: 72px; height: 228px; margin: 0 auto 20px; border-radius: 12px; background: var(--device);
     border: 5px solid var(--surface-2); display: grid; place-items: center; font-size: 30px;
   }
+  .device.shot { padding: 0; overflow: hidden; font-size: 0; height: auto; aspect-ratio: 172 / 640; cursor: zoom-in; }
+  .device.shot.wide { width: 100%; max-width: 288px; aspect-ratio: 640 / 172; }
+  .device img { width: 100%; height: 100%; object-fit: cover; display: block; image-rendering: auto; }
+  .shots { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin: -10px 0 18px; }
+  .shots[hidden] { display: none; }
+  .shots button { border: 2px solid transparent; border-radius: 6px; padding: 0; background: var(--device); cursor: pointer; line-height: 0; }
+  .shots button[aria-pressed="true"] { border-color: var(--text); }
+  .shots img { height: 28px; border-radius: 4px; }
   dl { display: grid; grid-template-columns: auto 1fr; gap: 4px 16px; font-size: 14px; margin: 0 0 20px; }
   dt { color: var(--muted); }
   dd { margin: 0; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
@@ -117,6 +125,7 @@
 
     <aside class="detail" id="detail" aria-live="polite">
       <div class="device" id="d-device"></div>
+      <div class="shots" id="d-shots" hidden></div>
       <div class="head">
         <div class="icon" id="d-icon"></div>
         <div>
@@ -135,6 +144,7 @@
         <span slot="unsupported"><button class="install" disabled>USB non pris en charge par ce navigateur</button></span>
         <span slot="not-allowed"><button class="install" disabled>Page à ouvrir en HTTPS</button></span>
       </esp-web-install-button>
+      <p class="hint" id="d-wifi" hidden>📶 Utilise le Wi-Fi : à la fin de l'installation, choisissez « Se connecter au Wi-Fi » pour le saisir. Le réseau est gardé sur le module et partagé par toutes les applications, inutile de le ressaisir.</p>
       <p class="hint">Remplace l'application actuelle du module. Si l'écran reste noir après l'installation, appuyez sur RESET.</p>
     </aside>
   </div>
@@ -144,6 +154,7 @@
     <ol>
       <li>Branchez le module sur ce PC avec un câble USB-C de données.</li>
       <li>Cliquez sur « Installer », choisissez le port <code>USB JTAG/serial debug unit</code>, puis confirmez.</li>
+      <li>Pour une application connectée, saisissez votre Wi-Fi quand l'installateur le propose : il servira à toutes les applications.</li>
       <li>Si aucun port n'apparaît : maintenez BOOT, appuyez sur RESET, relâchez BOOT, puis réessayez.</li>
     </ol>
   </section>
@@ -162,13 +173,53 @@
 
   function tint(hex) { return hex ? hex + "33" : "var(--surface-2)"; }
 
+  // Captures d'écran (scripts/screenshot.py) affichées dans le cadre du module
+  function showShot(app, i) {
+    const dev = $("d-device");
+    const src = app.screenshots[i];
+    const img = new Image();
+    img.alt = "Capture d'écran de " + app.name;
+    img.onload = () => dev.classList.toggle("wide", img.naturalWidth > img.naturalHeight);
+    img.src = src;
+    dev.replaceChildren(img);
+    dev.className = "device shot";
+    dev.onclick = () => window.open(src, "_blank");
+    dev.title = "Agrandir";
+    document.querySelectorAll("#d-shots button").forEach((b, j) => b.setAttribute("aria-pressed", j === i));
+  }
+
+  function showShots(app) {
+    const dev = $("d-device"), list = $("d-shots");
+    list.replaceChildren();
+    const shots = app.screenshots || [];
+    list.hidden = shots.length < 2;
+    if (!shots.length) {
+      dev.className = "device";
+      dev.onclick = null;
+      dev.title = "";
+      dev.textContent = app.icon || "📦";
+      return;
+    }
+    shots.forEach((src, i) => {
+      const b = document.createElement("button");
+      b.setAttribute("aria-label", "Capture " + (i + 1));
+      const im = document.createElement("img");
+      im.src = src;
+      im.alt = "";
+      b.appendChild(im);
+      b.addEventListener("click", () => showShot(app, i));
+      list.appendChild(b);
+    });
+    showShot(app, 0);
+  }
+
   function select(id) {
     const app = apps.find((a) => a.id === id) || apps[0];
     if (!app) return;
     document.querySelectorAll(".card").forEach((c) => c.setAttribute("aria-pressed", c.dataset.id === app.id));
     $("d-icon").textContent = app.icon || "📦";
     $("d-icon").style.background = tint(app.color);
-    $("d-device").textContent = app.icon || "📦";
+    showShots(app);
     $("d-name").textContent = app.name;
     $("d-cat").textContent = app.category || "";
     $("d-desc").textContent = app.description || app.summary || "";
@@ -176,6 +227,7 @@
     $("d-size").textContent = fmtSize(app.size);
     $("d-updated").textContent = app.updated || "";
     $("d-btn").textContent = "Installer " + app.name;
+    $("d-wifi").hidden = !app.wifi;
     $("installer").manifest = app.manifest;
     $("installer").setAttribute("manifest", app.manifest);
     try { history.replaceState(null, "", "#" + app.id); } catch (e) {}

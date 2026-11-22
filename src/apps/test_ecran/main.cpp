@@ -3,6 +3,7 @@
 #include <esp_mac.h>
 #include <lvgl.h>
 #include "../../display.h"
+#include "../common/screenshot.h"
 
 // Firmware de test : USB CDC + écran AXS15231B (LVGL 8) + tactile + PSRAM.
 
@@ -114,6 +115,7 @@ void setup() {
     Serial.println("ERREUR : initialisation de l'ecran");
     return;
   }
+  screenshot_begin(display_lock, display_unlock);
   if (display_lock(-1)) {
     build_ui();
     display_unlock();
@@ -124,7 +126,10 @@ void setup() {
 }
 
 void loop() {
-  static uint32_t n = 0;
+  screenshot_poll();  // "SCREENSHOT" depuis le PC (scripts/screenshot.py)
+  static uint32_t n = 0, last = 0;
+  if (millis() - last < 1000) { delay(20); return; }
+  last = millis();
   uint32_t s = millis() / 1000;
   if (uptime_label && display_lock(100)) {
     lv_label_set_text_fmt(uptime_label, "%lu s", (unsigned long)s);
@@ -136,5 +141,4 @@ void loop() {
   if (++n % 30 == 0) {
     printChipInfo();
   }
-  delay(1000);
 }

@@ -20,6 +20,8 @@
 #include "src/lcd_bl_bsp/lcd_bl_pwm_bsp.h"
 #include "weather.h"
 #include "ui.h"
+#include "../common/wifi_shared.h"
+#include "../common/screenshot.h"
 
 #define AP_NAME          "Meteo-Setup"
 #define MDNS_NAME        "meteo"
@@ -310,8 +312,7 @@ static void sendDone(const char *msg) {
 
 static void handleSave() {
   if (web.hasArg("s") && web.arg("s").length()) {
-    prefs.putString("ssid", web.arg("s"));
-    prefs.putString("pass", web.arg("p"));
+    wifi_shared_save(web.arg("s"), web.arg("p"));
   }
   if (web.hasArg("c")) {
     String c = web.arg("c");
@@ -374,7 +375,7 @@ static bool connectWifi() {
   WiFi.setAutoReconnect(true);
   WiFi.begin(savedSsid.c_str(), savedPass.c_str());
   uint32_t t0 = millis();
-  while (WiFi.status() != WL_CONNECTED && millis() - t0 < 20000) delay(250);
+  while (WiFi.status() != WL_CONNECTED && millis() - t0 < 20000) improv_delay(250);
   return WiFi.status() == WL_CONNECTED;
 }
 
@@ -472,16 +473,19 @@ static void battery_poll() {
 // ------------------------------------------------------------------ setup / loop
 void setup() {
   Serial.begin(115200);
-  delay(1500);
+  improv_begin("Météo", "1.0.0", "http://meteo.local");
+  improv_set_line_hook(screenshot_handle_line);  // "SCREENSHOT" depuis le PC
+  improv_delay(1500);
   Serial.println("[boot] Meteo");
   i2c_master_Init();
   power_init();
   lvgl_port_init();
+  screenshot_begin(lvgl_lock, lvgl_unlock);
   lcd_bl_pwm_bsp_init(LCD_PWM_MODE_255);
 
   prefs.begin("meteo", false);
-  savedSsid = prefs.getString("ssid", "");
-  savedPass = prefs.getString("pass", "");
+  // Wi-Fi partagé par toutes les applis (saisi via l'appstore, Improv ou le portail)
+  wifi_shared_load(savedSsid, savedPass, "meteo");
   forcePortal = prefs.getBool("portal", false);
   if (forcePortal) prefs.remove("portal");
   parseCities(prefs.getString("cities", DEFAULT_CITIES));
@@ -552,12 +556,12 @@ static bool serviceCity(int i, bool force) {
 
 void loop() {
   if (g_reqWifiReset) {
-    prefs.remove("ssid");
-    prefs.remove("pass");
+    wifi_shared_forget("meteo");
     prefs.putBool("portal", true);
     delay(300);
     ESP.restart();
   }
+  improv_poll();
   imu_poll();
   battery_poll();
 

@@ -17,6 +17,8 @@
 #include "src/lcd_bl_bsp/lcd_bl_pwm_bsp.h"
 #include "coins.h"
 #include "ui.h"
+#include "../common/wifi_shared.h"
+#include "../common/screenshot.h"
 // Pas d'identifiants Wi-Fi dans le firmware publié : le réseau se configure
 // uniquement via le portail captif et reste enregistré dans la NVS du module.
 
@@ -145,8 +147,7 @@ static void handleRoot() {
 }
 
 static void handleSave() {
-  prefs.putString("ssid", web.arg("s"));
-  prefs.putString("pass", web.arg("p"));
+  wifi_shared_save(web.arg("s"), web.arg("p"));
   web.send(200, "text/html; charset=utf-8",
            "<meta charset='utf-8'><body style='font-family:sans-serif;background:#0b0e14;color:#eee;padding:24px'>"
            "<h2>Enregistré</h2><p>Le tracker redémarre et se connecte...</p>");
@@ -194,7 +195,7 @@ static bool connectWifi() {
   WiFi.setAutoReconnect(true);
   WiFi.begin(savedSsid.c_str(), savedPass.c_str());
   uint32_t t0 = millis();
-  while (WiFi.status() != WL_CONNECTED && millis() - t0 < 20000) delay(250);
+  while (WiFi.status() != WL_CONNECTED && millis() - t0 < 20000) improv_delay(250);
   return WiFi.status() == WL_CONNECTED;
 }
 
@@ -313,17 +314,20 @@ static void battery_poll() {
 // ------------------------------------------------------------------ setup / loop
 void setup() {
   Serial.begin(115200);
-  delay(1500);
+  improv_begin("CryptoTracker", "1.0.0", nullptr);
+  improv_set_line_hook(screenshot_handle_line);  // "SCREENSHOT" depuis le PC
+  improv_delay(1500);
   Serial.println("[boot] CryptoTracker");
   i2c_master_Init();
   power_init();
   lvgl_port_init();
+  screenshot_begin(lvgl_lock, lvgl_unlock);
   lcd_bl_pwm_bsp_init(LCD_PWM_MODE_255);  // luminosité max (PWM inversé)
 
   prefs.begin("tracker", false);
   // Wi-Fi : identifiants saisis via le portail (vide au premier démarrage -> portail)
-  savedSsid = prefs.getString("ssid", "");
-  savedPass = prefs.getString("pass", "");
+  // Wi-Fi partagé par toutes les applis (saisi via l'appstore, Improv ou le portail)
+  wifi_shared_load(savedSsid, savedPass, "tracker");
   forcePortal = prefs.getBool("portal", false);
   if (forcePortal) prefs.remove("portal");
   imu_init();
@@ -348,12 +352,12 @@ void setup() {
 
 void loop() {
   if (g_reqWifiReset) {
-    prefs.remove("ssid");
-    prefs.remove("pass");
+    wifi_shared_forget("tracker");
     prefs.putBool("portal", true);  // au prochain démarrage : portail de configuration
     delay(200);
     ESP.restart();
   }
+  improv_poll();
   imu_poll();
   battery_poll();
 

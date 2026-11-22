@@ -1,0 +1,13 @@
+{
+  "name": "Énergie Gladys",
+  "version": "1.0.0",
+  "category": "Maison",
+  "icon": "☀️",
+  "color": "#ffc53d",
+  "summary": "Production solaire, consommation et températures depuis Gladys Assistant.",
+  "description": "Affiche en direct la production solaire, la consommation de la maison, l'achat ou l'injection sur le réseau, les énergies du jour, la part couverte par le solaire, les températures extérieure et intérieure, et une courbe production / consommation sur 3 h. Les données viennent de votre Gladys Assistant (service MCP) : saisissez son adresse, une clé API avec le droit « mcp » et vos capteurs sur http://energie.local. La clé reste dans le module.",
+  "wifi": true,
+  "screenshots": [
+    "screenshots/gladys/1.png"
+  ]
+}

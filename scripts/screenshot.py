@@ -62,7 +62,7 @@ def capture(port, timeout=15):
         while len(data) < need:
             chunk = s.read(need - len(data))
             if not chunk:
-                sys.exit("Capture incomplète (%d/%d octets)" % (len(data), need))
+                raise IOError("capture incomplète (%d/%d octets)" % (len(data), need))
             data += chunk
         data = data[:need]
     finally:
@@ -116,7 +116,16 @@ def main():
     if not os.path.isfile(os.path.join(ROOT, "src", "apps", args.app, "app.json")):
         sys.exit("App inconnue : src/apps/%s/app.json introuvable" % args.app)
 
-    img = capture(args.port or default_port())
+    # le lien USB perd parfois quelques octets sur 220 Ko : on recommence
+    for attempt in range(3):
+        try:
+            img = capture(args.port or default_port())
+            break
+        except IOError as e:
+            print("Essai %d : %s" % (attempt + 1, e))
+            time.sleep(1)
+    else:
+        sys.exit("Échec de la capture après 3 essais")
     out_dir = os.path.join(DOCS, "screenshots", args.app)
     os.makedirs(out_dir, exist_ok=True)
     if args.reset and not args.no_store:

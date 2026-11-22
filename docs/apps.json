@@ -51,6 +51,24 @@
       ]
     },
     {
+      "name": "Suivi Claude",
+      "version": "1.0.0",
+      "category": "Outils",
+      "icon": "✳️",
+      "color": "#d97757",
+      "summary": "Dépenses de votre organisation Claude : mois, jours, modèles et budget.",
+      "description": "Affiche les dépenses du mois de votre organisation Claude (Console), la veille et le jour en cours, un histogramme des 30 derniers jours, la répartition par modèle, les tokens et requêtes du mois, et une estimation de fin de mois par rapport à votre budget. Les données viennent de l'Admin API d'Anthropic (Usage and Cost Analytics), qui les publie avec 4 à 24 h de retard. Saisissez une clé Admin API (sk-ant-admin…) et votre budget sur http://claude.local : la clé reste dans le module et n'est envoyée qu'à api.anthropic.com, certificat vérifié.",
+      "wifi": true,
+      "id": "claude",
+      "manifest": "firmware/claude/manifest.json",
+      "size": 1609264,
+      "sha256": "e7a097082657",
+      "updated": "2026-11-22",
+      "screenshots": [
+        "screenshots/claude/1.png"
+      ]
+    },
+    {
       "name": "Test écran",
       "version": "1.0.0",
       "category": "Outils",

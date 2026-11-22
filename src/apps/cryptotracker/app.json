@@ -6,5 +6,8 @@
   "color": "#f7931a",
   "summary": "Cours en direct de 12 cryptos avec graphique.",
   "description": "Prix, variation 24 h, plus haut et plus bas de BTC, ETH, SOL et 9 autres cryptos (API publique Binance), graphique sur 1 h, 24 h, 7 j ou 30 j, batterie et retournement automatique de l'écran. Le Wi-Fi se saisit à la fin de l'installation (ou via le Wi-Fi « CryptoTracker-Setup ») et il est partagé avec les autres applications.",
-  "wifi": true
+  "wifi": true,
+  "screenshots": [
+    "screenshots/cryptotracker/1.png"
+  ]
 }
